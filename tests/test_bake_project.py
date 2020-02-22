@@ -1,18 +1,16 @@
-from contextlib import contextmanager
-import shlex
+import datetime
+import importlib
 import os
-import sys
+import shlex
 import subprocess
+import sys
+from contextlib import contextmanager
 from pathlib import Path
 
 import pytest
 import yaml
-import datetime
-from cookiecutter.utils import rmtree
-
 from click.testing import CliRunner
-
-import importlib
+from cookiecutter.utils import rmtree
 
 
 @contextmanager
@@ -76,7 +74,6 @@ def project_info(result):
     return project_path, project_slug, project_dir
 
 
-@pytest.mark.xfail
 def test_bake_with_defaults(cookies):
     with bake_in_temp_dir(cookies) as result:
         assert result.project.isdir()
@@ -84,10 +81,18 @@ def test_bake_with_defaults(cookies):
         assert result.exception is None
 
         found_toplevel_files = [f.basename for f in result.project.listdir()]
-        assert "setup.py" in found_toplevel_files
+        assert "pyproject.toml" in found_toplevel_files
         assert "python_boilerplate" in found_toplevel_files
         assert "tox.ini" in found_toplevel_files
         assert "tests" in found_toplevel_files
+        assert "docs" in found_toplevel_files
+        assert ".bumpversion.cfg" in found_toplevel_files
+        assert ".editorconfig" in found_toplevel_files
+        assert ".gitignore" in found_toplevel_files
+        assert "AUTHORS.rst" in found_toplevel_files
+        assert "HISTORY.rst" in found_toplevel_files
+        assert "LICENSE" in found_toplevel_files
+        assert "README.rst" in found_toplevel_files
 
 
 @pytest.mark.xfail
@@ -159,7 +164,7 @@ def test_bake_selecting_license(cookies):
     license_strings = {
         "MIT license": "MIT ",
         "BSD license": "Redistributions of source code must retain the "
-        + "above copyright notice, this",
+                       + "above copyright notice, this",
         "ISC license": "ISC License",
         "Apache Software License 2.0": "Licensed under the Apache License, Version 2.0",
         "GNU General Public License v3": "GNU GENERAL PUBLIC LICENSE",
