@@ -7,7 +7,7 @@ PROJECT_DIRECTORY = Path(".").absolute()
 
 
 def remove(filepath):
-    target = (PROJECT_DIRECTORY / filepath)
+    target = PROJECT_DIRECTORY / filepath
 
     if target.is_dir():
         shutil.rmtree(target, ignore_errors=True)

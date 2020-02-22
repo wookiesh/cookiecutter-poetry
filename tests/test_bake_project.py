@@ -3,7 +3,6 @@ import importlib
 import os
 import shlex
 import subprocess
-import sys
 from contextlib import contextmanager
 from pathlib import Path
 
@@ -180,13 +179,31 @@ def test_bake_without_docs(cookies):
     [
         ("MIT license", "MIT", "MIT License"),
         ("Apache Software License 2.0", "Apache-2.0", "Apache License"),
-        ("GNU General Public License v3.0", "GPL-3.0-only", "GNU GENERAL PUBLIC LICENSE"),
-        ("GNU General Public License v2.0", "GPL-2.0-only", "GNU GENERAL PUBLIC LICENSE"),
-        ("BSD 3-Clause 'New' or 'Revised' License", "BSD-3-Clause",
-         f"Copyright (c) {datetime.date.today().year} Johan Vergeer"),
-        ("GNU Lesser General Public License v2.1", "LGPL-2.1-only", "GNU LESSER GENERAL PUBLIC LICENSE"),
-        ("BSD 2-Clause 'Simplified' License", "BSD-2-Clause",
-         f"Copyright (c) {datetime.date.today().year} Johan Vergeer"),
+        (
+            "GNU General Public License v3.0",
+            "GPL-3.0-only",
+            "GNU GENERAL PUBLIC LICENSE",
+        ),
+        (
+            "GNU General Public License v2.0",
+            "GPL-2.0-only",
+            "GNU GENERAL PUBLIC LICENSE",
+        ),
+        (
+            "BSD 3-Clause 'New' or 'Revised' License",
+            "BSD-3-Clause",
+            f"Copyright (c) {datetime.date.today().year} Johan Vergeer",
+        ),
+        (
+            "GNU Lesser General Public License v2.1",
+            "LGPL-2.1-only",
+            "GNU LESSER GENERAL PUBLIC LICENSE",
+        ),
+        (
+            "BSD 2-Clause 'Simplified' License",
+            "BSD-2-Clause",
+            f"Copyright (c) {datetime.date.today().year} Johan Vergeer",
+        ),
     ],
 )
 def test_bake_selecting_license(cookies, full_name, identifier, file_starts_with):
@@ -194,7 +211,9 @@ def test_bake_selecting_license(cookies, full_name, identifier, file_starts_with
         cookies, extra_context={"open_source_license": full_name}
     ) as result:
         assert file_starts_with.lower() in result.project.join("LICENSE").read().lower()
-        assert f"license = \"{identifier}\"" in result.project.join("pyproject.toml").read()
+        assert (
+            f'license = "{identifier}"' in result.project.join("pyproject.toml").read()
+        )
 
 
 def test_bake_not_open_source(cookies):
@@ -210,27 +229,7 @@ def test_bake_not_open_source(cookies):
 
 # endregion
 
-# def test_project_with_hyphen_in_module_name(cookies):
-#     result = cookies.bake(
-#         extra_context={'project_name': 'something-with-a-dash'}
-#     )
-#     assert result.project is not None
-#     project_path = str(result.project)
-#
-#     # when:
-#     travis_setup_cmd = ('python travis_pypi_setup.py'
-#                         ' --repo audreyr/cookiecutter-pypackage'
-#                         ' --password invalidpass')
-#     run_inside_dir(travis_setup_cmd, project_path)
-#
-#     # then:
-#     result_travis_config = yaml.load(
-#         open(os.path.join(project_path, ".travis.yml"))
-#     )
-#     assert "secure" in result_travis_config["deploy"]["password"],\
-#         "missing password config in .travis.yml"
-
-
+# region CLI tools
 @pytest.mark.xfail
 def test_bake_with_no_console_script(cookies):
     context = {"command_line_interface": "No command-line interface"}
@@ -312,3 +311,6 @@ def test_bake_with_argparse_console_script_cli(cookies):
     help_result = runner.invoke(cli.main, ["--help"])
     assert help_result.exit_code == 0
     assert "Show this message" in help_result.output
+
+
+# endregion
