@@ -34,6 +34,7 @@ python = "^3.6"
 pytest-cookies = "^0.4.0"
 alabaster = "^0.7.12"
 watchdog = "^0.10.1"
+black = "^19.10b0"
 
 [build-system]
 requires = ["poetry>=0.12"]
