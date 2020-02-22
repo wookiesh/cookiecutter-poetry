@@ -5,11 +5,13 @@ import shlex
 import subprocess
 from contextlib import contextmanager
 from pathlib import Path
+from typing import Tuple
 
 import pytest
 import yaml
 from click.testing import CliRunner
 from cookiecutter.utils import rmtree
+from pytest_cookies.plugin import Cookies
 
 
 @contextmanager
@@ -58,18 +60,18 @@ def check_output_inside_dir(command, dirpath):
         return subprocess.check_output(shlex.split(command))
 
 
-def project_info(result):
+def project_info(result) -> Tuple[Path, str, Path]:
     """Get toplevel dir, project_slug, and project dir from baked cookies"""
-    project_path = str(result.project)
-    project_slug = os.path.split(project_path)[-1]
-    project_dir = os.path.join(project_path, project_slug)
+    project_path: Path = Path(result.project)
+    project_slug: str = os.path.split(str(project_path))[-1]
+    project_dir: Path = project_path / project_slug
     return project_path, project_slug, project_dir
 
 
 # region Default output tests
 
 
-def test_bake_with_defaults(cookies):
+def test_bake_with_defaults(cookies: Cookies) -> None:
     with bake_in_temp_dir(cookies) as result:
         assert result.project.isdir()
         assert result.exit_code == 0
@@ -132,7 +134,7 @@ def test_bake_with_apostrophe(cookies):
 # endregion
 
 
-def test_bake_without_travis_pypi_setup(cookies):
+def test_bake_without_travis_pypi_setup(cookies: Cookies) -> None:
     with bake_in_temp_dir(
         cookies, extra_context={"use_pypi_deployment_with_travis": "n"}
     ) as result:
@@ -147,7 +149,7 @@ def test_bake_without_travis_pypi_setup(cookies):
 # region Excluding files
 
 
-def test_bake_without_author_file(cookies):
+def test_bake_without_author_file(cookies: Cookies) -> None:
     with bake_in_temp_dir(cookies, extra_context={"create_author_file": "n"}) as result:
         found_toplevel_files = [f.basename for f in result.project.listdir()]
         assert "AUTHORS.rst" not in found_toplevel_files
@@ -160,7 +162,7 @@ def test_bake_without_author_file(cookies):
             assert "contributing\n   history" in index_file.read()
 
 
-def test_bake_without_docs(cookies):
+def test_bake_without_docs(cookies: Cookies) -> None:
     with bake_in_temp_dir(cookies, extra_context={"create_docs": "n"}) as result:
         found_toplevel_files = [f.basename for f in result.project.listdir()]
         assert "docs" not in found_toplevel_files
@@ -206,7 +208,7 @@ def test_bake_without_docs(cookies):
         ),
     ],
 )
-def test_bake_selecting_license(cookies, full_name, identifier, file_starts_with):
+def test_bake_selecting_license(cookies: Cookies, full_name: str, identifier: str, file_starts_with: str) -> None:
     with bake_in_temp_dir(
         cookies, extra_context={"open_source_license": full_name}
     ) as result:
@@ -216,7 +218,7 @@ def test_bake_selecting_license(cookies, full_name, identifier, file_starts_with
         )
 
 
-def test_bake_not_open_source(cookies):
+def test_bake_not_open_source(cookies: Cookies) -> None:
     with bake_in_temp_dir(
         cookies, extra_context={"open_source_license": "Not open source"}
     ) as result:
@@ -230,34 +232,74 @@ def test_bake_not_open_source(cookies):
 # endregion
 
 # region CLI tools
+
+# region No Console script
+
+
+def test_bake_with_no_console_script(cookies: Cookies) -> None:
+    with bake_in_temp_dir(
+        cookies, extra_context={"command_line_interface": "No command-line interface"}
+    ) as result:
+        project_path, project_slug, project_dir = project_info(result)
+        assert not (project_dir / "cli.py").exists()
+
+        assert (
+            f"tool.poetry.plugins." not in result.project.join("pyproject.toml").read()
+        )
+
+
+# endregion
+
+# region Click
+
+
+def test_bake_with_click_console_script_files(cookies: Cookies) -> None:
+    with bake_in_temp_dir(
+        cookies, extra_context={"command_line_interface": "click"}
+    ) as result:
+        project_path, project_slug, project_dir = project_info(result)
+
+        assert (project_dir / "cli.py").exists()
+        assert (
+            f"import click"
+            in result.project.join("python_boilerplate").join("cli.py").read()
+        )
+        assert f'Click = "^7.0"' in result.project.join("pyproject.toml").read()
+        assert (
+            """[tool.poetry.plugins.\"console_scripts\"]
+\"python_boilerplate\" = \"python_boilerplate.cli:main\"
+"""
+            in result.project.join("pyproject.toml").read()
+        )
+
+
+def test_bake_with_click_console_script(cookies: Cookies) -> None:
+    with bake_in_temp_dir(
+        cookies, extra_context={"command_line_interface": "click"}
+    ) as result:
+        project_path, project_slug, project_dir = project_info(result)
+        module_path = project_dir / "cli.py"
+        module_name = f"{project_slug}.cli"
+        spec = importlib.util.spec_from_file_location(module_name, module_path)
+        cli = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(cli)
+        runner = CliRunner()
+        noarg_result = runner.invoke(cli.main)
+        assert noarg_result.exit_code == 0
+        noarg_output = f"Replace this message by putting your code into {project_slug}"
+        assert noarg_output in noarg_result.output
+        help_result = runner.invoke(cli.main, ["--help"])
+        assert help_result.exit_code == 0
+        assert "Show this message" in help_result.output
+
+
+# endregion
+
+# region argparse
+
+
 @pytest.mark.xfail
-def test_bake_with_no_console_script(cookies):
-    context = {"command_line_interface": "No command-line interface"}
-    result = cookies.bake(extra_context=context)
-    project_path, project_slug, project_dir = project_info(result)
-    found_project_files = os.listdir(project_dir)
-    assert "cli.py" not in found_project_files
-
-    setup_path = os.path.join(project_path, "setup.py")
-    with open(setup_path, "r") as setup_file:
-        assert "entry_points" not in setup_file.read()
-
-
-@pytest.mark.xfail
-def test_bake_with_console_script_files(cookies):
-    context = {"command_line_interface": "click"}
-    result = cookies.bake(extra_context=context)
-    project_path, project_slug, project_dir = project_info(result)
-    found_project_files = os.listdir(project_dir)
-    assert "cli.py" in found_project_files
-
-    setup_path = os.path.join(project_path, "setup.py")
-    with open(setup_path, "r") as setup_file:
-        assert "entry_points" in setup_file.read()
-
-
-@pytest.mark.xfail
-def test_bake_with_argparse_console_script_files(cookies):
+def test_bake_with_argparse_console_script_files(cookies: Cookies) -> None:
     context = {"command_line_interface": "argparse"}
     result = cookies.bake(extra_context=context)
     project_path, project_slug, project_dir = project_info(result)
@@ -270,8 +312,8 @@ def test_bake_with_argparse_console_script_files(cookies):
 
 
 @pytest.mark.xfail
-def test_bake_with_console_script_cli(cookies):
-    context = {"command_line_interface": "click"}
+def test_bake_with_argparse_console_script_cli(cookies: Cookies) -> None:
+    context = {"command_line_interface": "argparse"}
     result = cookies.bake(extra_context=context)
     project_path, project_slug, project_dir = project_info(result)
     module_path = os.path.join(project_dir, "cli.py")
@@ -291,26 +333,6 @@ def test_bake_with_console_script_cli(cookies):
     assert "Show this message" in help_result.output
 
 
-@pytest.mark.xfail
-def test_bake_with_argparse_console_script_cli(cookies):
-    context = {"command_line_interface": "argparse"}
-    result = cookies.bake(extra_context=context)
-    project_path, project_slug, project_dir = project_info(result)
-    module_path = os.path.join(project_dir, "cli.py")
-    module_name = ".".join([project_slug, "cli"])
-    spec = importlib.util.spec_from_file_location(module_name, module_path)
-    cli = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(cli)
-    runner = CliRunner()
-    noarg_result = runner.invoke(cli.main)
-    assert noarg_result.exit_code == 0
-    noarg_output = " ".join(
-        ["Replace this message by putting your code into", project_slug]
-    )
-    assert noarg_output in noarg_result.output
-    help_result = runner.invoke(cli.main, ["--help"])
-    assert help_result.exit_code == 0
-    assert "Show this message" in help_result.output
-
+# endregion
 
 # endregion
