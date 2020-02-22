@@ -90,6 +90,8 @@ def test_bake_with_defaults(cookies):
         assert "LICENSE" in found_toplevel_files
         assert "README.rst" in found_toplevel_files
 
+        assert "licenses" not in found_toplevel_files
+
 
 def test_year_compute_in_license_file(cookies):
     with bake_in_temp_dir(cookies) as result:
@@ -175,34 +177,41 @@ def test_make_help(cookies):
             assert b"check code coverage quickly with the default Python" in output
 
 
-@pytest.mark.xfail
-def test_bake_selecting_license(cookies):
-    license_strings = {
-        "MIT license": "MIT ",
-        "BSD license": "Redistributions of source code must retain the "
-        + "above copyright notice, this",
-        "ISC license": "ISC License",
-        "Apache Software License 2.0": "Licensed under the Apache License, Version 2.0",
-        "GNU General Public License v3": "GNU GENERAL PUBLIC LICENSE",
-    }
-    for license, target_string in license_strings.items():
-        with bake_in_temp_dir(
-            cookies, extra_context={"open_source_license": license}
-        ) as result:
-            assert target_string in result.project.join("LICENSE").read()
-            assert license in result.project.join("setup.py").read()
+# region License
 
 
-@pytest.mark.xfail
+@pytest.mark.parametrize(
+    "full_name,identifier,file_starts_with",
+    [
+        ("MIT license", "MIT", "MIT License"),
+        ("Apache Software License 2.0", "Apache-2.0", "Apache License"),
+        ("GNU General Public License v3.0", "GPL-3.0-only", "GNU GENERAL PUBLIC LICENSE"),
+        ("GNU General Public License v2.0", "GPL-2.0-only", "GNU GENERAL PUBLIC LICENSE"),
+        ("BSD 3-Clause 'New' or 'Revised' License", "BSD-3-Clause", f"Copyright (c) {datetime.date.today().year} Johan Vergeer"),
+        ("GNU Lesser General Public License v2.1", "LGPL-2.1-only", "GNU LESSER GENERAL PUBLIC LICENSE"),
+        ("BSD 2-Clause 'Simplified' License", "BSD-2-Clause", f"Copyright (c) {datetime.date.today().year} Johan Vergeer"),
+    ],
+)
+def test_bake_selecting_license(cookies, full_name, identifier, file_starts_with):
+    with bake_in_temp_dir(
+        cookies, extra_context={"open_source_license": full_name}
+    ) as result:
+        assert file_starts_with.lower() in result.project.join("LICENSE").read().lower()
+        assert f"license = \"{identifier}\"" in result.project.join("pyproject.toml").read()
+
+
 def test_bake_not_open_source(cookies):
     with bake_in_temp_dir(
         cookies, extra_context={"open_source_license": "Not open source"}
     ) as result:
         found_toplevel_files = [f.basename for f in result.project.listdir()]
-        assert "setup.py" in found_toplevel_files
+        assert "pyproject.toml" in found_toplevel_files
+        assert f"license = " not in result.project.join("pyproject.toml").read()
         assert "LICENSE" not in found_toplevel_files
         assert "License" not in result.project.join("README.rst").read()
 
+
+# endregion
 
 # def test_project_with_hyphen_in_module_name(cookies):
 #     result = cookies.bake(

@@ -17,10 +17,12 @@
     "create_author_file": "y",
     "open_source_license": [
         "MIT license",
-        "BSD license",
-        "ISC license",
         "Apache Software License 2.0",
-        "GNU General Public License v3",
+        "GNU General Public License v3.0",
+        "GNU General Public License v2.0",
+        "BSD 3-Clause 'New' or 'Revised' License",
+        "GNU Lesser General Public License v2.1",
+        "BSD 2-Clause 'Simplified' License",
         "Not open source"
     ]
 }
