@@ -3,6 +3,8 @@ import shlex
 import os
 import sys
 import subprocess
+from pathlib import Path
+
 import yaml
 import datetime
 from cookiecutter.utils import rmtree
@@ -33,7 +35,9 @@ def bake_in_temp_dir(cookies, *args, **kwargs):
     :param cookies: pytest_cookies.Cookies,
         cookie to be baked and its temporal files will be removed
     """
-    result = cookies.bake(*args, **kwargs)
+    current_path = Path(".").parent.absolute()
+    template_path = current_path.parent.absolute()
+    result = cookies.bake(*args, template=str(template_path), **kwargs)
     try:
         yield result
     finally:
@@ -199,18 +203,7 @@ def test_using_pytest(cookies):
         lines = test_file_path.readlines()
         assert "import pytest" in "".join(lines)
         # Test the new pytest target
-        run_inside_dir("python setup.py pytest", str(result.project)) == 0
-        # Test the test alias (which invokes pytest)
-        run_inside_dir("python setup.py test", str(result.project)) == 0
-
-
-def test_not_using_pytest(cookies):
-    with bake_in_temp_dir(cookies) as result:
-        assert result.project.isdir()
-        test_file_path = result.project.join("tests/test_python_boilerplate.py")
-        lines = test_file_path.readlines()
-        assert "import unittest" in "".join(lines)
-        assert "import pytest" not in "".join(lines)
+        assert run_inside_dir("pytest", str(result.project)) == 0
 
 
 # def test_project_with_hyphen_in_module_name(cookies):

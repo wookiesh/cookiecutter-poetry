@@ -54,9 +54,8 @@ Sphinx = "^1.8.5"
 twine = "^1.14.0"
 {% if cookiecutter.command_line_interface|lower == 'click' -%}
 Click = "^7.0"{% endif %}
-{% if cookiecutter.use_pytest == 'y' -%}
 pytest = "^4.6.5"
-pytest-runner = "^5.1"{% endif %}
+pytest-runner = "^5.1"
 
 [build-system]
 requires = ["poetry>=0.12"]
