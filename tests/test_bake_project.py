@@ -59,19 +59,15 @@ def check_output_inside_dir(command, dirpath):
         return subprocess.check_output(shlex.split(command))
 
 
-def test_year_compute_in_license_file(cookies):
-    with bake_in_temp_dir(cookies) as result:
-        license_file_path = result.project.join("LICENSE")
-        now = datetime.datetime.now()
-        assert str(now.year) in license_file_path.read()
-
-
 def project_info(result):
     """Get toplevel dir, project_slug, and project dir from baked cookies"""
     project_path = str(result.project)
     project_slug = os.path.split(project_path)[-1]
     project_dir = os.path.join(project_path, project_slug)
     return project_path, project_slug, project_dir
+
+
+# region Default output tests
 
 
 def test_bake_with_defaults(cookies):
@@ -95,6 +91,18 @@ def test_bake_with_defaults(cookies):
         assert "README.rst" in found_toplevel_files
 
 
+def test_year_compute_in_license_file(cookies):
+    with bake_in_temp_dir(cookies) as result:
+        license_file_path = result.project.join("LICENSE")
+        now = datetime.datetime.now()
+        assert str(now.year) in license_file_path.read()
+
+
+# endregion
+
+# region pytest
+
+
 def test_bake_and_run_tests(cookies):
     with bake_in_temp_dir(cookies) as result:
         assert result.project.isdir()
@@ -102,22 +110,30 @@ def test_bake_and_run_tests(cookies):
         print("test_bake_and_run_tests path", str(result.project))
 
 
-@pytest.mark.xfail
-def test_bake_withspecialchars_and_run_tests(cookies):
-    """Ensure that a `full_name` with double quotes does not break setup.py"""
-    with bake_in_temp_dir(
-        cookies, extra_context={"full_name": 'name "quote" name'}
-    ) as result:
+def test_using_pytest(cookies):
+    with bake_in_temp_dir(cookies, extra_context={"use_pytest": "y"}) as result:
         assert result.project.isdir()
-        run_inside_dir("python setup.py test", str(result.project)) == 0
+        test_file_path = result.project.join("tests/test_python_boilerplate.py")
+        lines = test_file_path.readlines()
+        assert "import pytest" in "".join(lines)
+        # Test the new pytest target
+        assert run_inside_dir("pytest", str(result.project)) == 0
 
 
-@pytest.mark.xfail
-def test_bake_with_apostrophe_and_run_tests(cookies):
+# endregion
+
+
+# region special characters
+
+
+def test_bake_with_apostrophe(cookies):
     """Ensure that a `full_name` with apostrophes does not break setup.py"""
     with bake_in_temp_dir(cookies, extra_context={"full_name": "O'connor"}) as result:
         assert result.project.isdir()
-        run_inside_dir("python setup.py test", str(result.project)) == 0
+        assert run_inside_dir("poetry check", str(result.project)) == 0
+
+
+# endregion
 
 
 def test_bake_without_travis_pypi_setup(cookies):
@@ -132,6 +148,9 @@ def test_bake_without_travis_pypi_setup(cookies):
         # found_toplevel_files = [f.basename for f in result.project.listdir()]
 
 
+# region Excluding files
+
+
 def test_bake_without_author_file(cookies):
     with bake_in_temp_dir(cookies, extra_context={"create_author_file": "n"}) as result:
         found_toplevel_files = [f.basename for f in result.project.listdir()]
@@ -144,10 +163,8 @@ def test_bake_without_author_file(cookies):
         with open(str(docs_index_path)) as index_file:
             assert "contributing\n   history" in index_file.read()
 
-        # Check that
-        manifest_path = result.project.join("MANIFEST.in")
-        with open(str(manifest_path)) as manifest_file:
-            assert "AUTHORS.rst" not in manifest_file.read()
+
+# endregion
 
 
 def test_make_help(cookies):
@@ -163,7 +180,7 @@ def test_bake_selecting_license(cookies):
     license_strings = {
         "MIT license": "MIT ",
         "BSD license": "Redistributions of source code must retain the "
-                       + "above copyright notice, this",
+        + "above copyright notice, this",
         "ISC license": "ISC License",
         "Apache Software License 2.0": "Licensed under the Apache License, Version 2.0",
         "GNU General Public License v3": "GNU GENERAL PUBLIC LICENSE",
@@ -185,16 +202,6 @@ def test_bake_not_open_source(cookies):
         assert "setup.py" in found_toplevel_files
         assert "LICENSE" not in found_toplevel_files
         assert "License" not in result.project.join("README.rst").read()
-
-
-def test_using_pytest(cookies):
-    with bake_in_temp_dir(cookies, extra_context={"use_pytest": "y"}) as result:
-        assert result.project.isdir()
-        test_file_path = result.project.join("tests/test_python_boilerplate.py")
-        lines = test_file_path.readlines()
-        assert "import pytest" in "".join(lines)
-        # Test the new pytest target
-        assert run_inside_dir("pytest", str(result.project)) == 0
 
 
 # def test_project_with_hyphen_in_module_name(cookies):
