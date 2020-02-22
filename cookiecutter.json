@@ -15,6 +15,7 @@
         "No command-line interface"
     ],
     "create_author_file": "y",
+    "create_docs": "y",
     "open_source_license": [
         "MIT license",
         "Apache Software License 2.0",

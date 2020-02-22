@@ -13,7 +13,7 @@ authors = ["{{ cookiecutter.full_name.replace("\"", "\\\"") }} <{{ cookiecutter.
     "BSD 2-Clause 'Simplified' License": "BSD-2-Clause",
 } %}
 {%- if cookiecutter.open_source_license in license_classifiers %}
-license = "{{ license_classifiers[cookiecutter.open_source_license] }}",
+license = "{{ license_classifiers[cookiecutter.open_source_license] }}"
 {%- endif %}
 readme = "README.rst"
 keywords = ["{{ cookiecutter.project_slug }}"]
@@ -50,8 +50,8 @@ watchdog = "^0.9.0"
 flake8 = "^3.7.8"
 tox = "^3.14.0"
 coverage = "^4.5.4"
-Sphinx = "^1.8.5"
-twine = "^1.14.0"
+{% if cookiecutter.create_docs == "y" %}
+Sphinx = "^1.8.5"{% endif %}
 {% if cookiecutter.command_line_interface|lower == 'click' -%}
 Click = "^7.0"{% endif %}
 pytest = "^4.6.5"

@@ -76,6 +76,8 @@ def test_bake_with_defaults(cookies):
         assert result.exit_code == 0
         assert result.exception is None
 
+        assert run_inside_dir("poetry check", str(result.project)) == 0
+
         found_toplevel_files = [f.basename for f in result.project.listdir()]
         assert "pyproject.toml" in found_toplevel_files
         assert "python_boilerplate" in found_toplevel_files
@@ -91,13 +93,6 @@ def test_bake_with_defaults(cookies):
         assert "README.rst" in found_toplevel_files
 
         assert "licenses" not in found_toplevel_files
-
-
-def test_year_compute_in_license_file(cookies):
-    with bake_in_temp_dir(cookies) as result:
-        license_file_path = result.project.join("LICENSE")
-        now = datetime.datetime.now()
-        assert str(now.year) in license_file_path.read()
 
 
 # endregion
@@ -166,6 +161,14 @@ def test_bake_without_author_file(cookies):
             assert "contributing\n   history" in index_file.read()
 
 
+def test_bake_without_docs(cookies):
+    with bake_in_temp_dir(cookies, extra_context={"create_docs": "n"}) as result:
+        found_toplevel_files = [f.basename for f in result.project.listdir()]
+        assert "docs" not in found_toplevel_files
+        assert "Sphinx" not in result.project.join("pyproject.toml").read()
+        assert "* Documentation: " not in result.project.join("README.rst").read()
+
+
 # endregion
 
 
@@ -187,9 +190,11 @@ def test_make_help(cookies):
         ("Apache Software License 2.0", "Apache-2.0", "Apache License"),
         ("GNU General Public License v3.0", "GPL-3.0-only", "GNU GENERAL PUBLIC LICENSE"),
         ("GNU General Public License v2.0", "GPL-2.0-only", "GNU GENERAL PUBLIC LICENSE"),
-        ("BSD 3-Clause 'New' or 'Revised' License", "BSD-3-Clause", f"Copyright (c) {datetime.date.today().year} Johan Vergeer"),
+        ("BSD 3-Clause 'New' or 'Revised' License", "BSD-3-Clause",
+         f"Copyright (c) {datetime.date.today().year} Johan Vergeer"),
         ("GNU Lesser General Public License v2.1", "LGPL-2.1-only", "GNU LESSER GENERAL PUBLIC LICENSE"),
-        ("BSD 2-Clause 'Simplified' License", "BSD-2-Clause", f"Copyright (c) {datetime.date.today().year} Johan Vergeer"),
+        ("BSD 2-Clause 'Simplified' License", "BSD-2-Clause",
+         f"Copyright (c) {datetime.date.today().year} Johan Vergeer"),
     ],
 )
 def test_bake_selecting_license(cookies, full_name, identifier, file_starts_with):
