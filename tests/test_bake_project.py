@@ -95,11 +95,10 @@ def test_bake_with_defaults(cookies):
         assert "README.rst" in found_toplevel_files
 
 
-@pytest.mark.xfail
 def test_bake_and_run_tests(cookies):
     with bake_in_temp_dir(cookies) as result:
         assert result.project.isdir()
-        run_inside_dir("python setup.py test", str(result.project)) == 0
+        assert run_inside_dir("pytest", str(result.project)) == 0
         print("test_bake_and_run_tests path", str(result.project))
 
 
