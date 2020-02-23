@@ -35,9 +35,10 @@ classifiers = [
 
 [tool.poetry.urls]
 "Bug Tracker" = "https://github.com/johanvergeer/cookiecutter-poetry/issues"
-"Documentation" = "https://docs.getpelican.com/"
 "Source" = "https://github.com/{{ cookiecutter.github_username }}/{{ cookiecutter.project_slug }}"
 "Tracker" = "https://github.com/{{ cookiecutter.github_username }}/{{ cookiecutter.project_slug }}/issues"
+{% if cookiecutter.create_docs == "y" %}
+"Documentation" = "https://{{ cookiecutter.project_slug }}.readthedocs.io"{% endif %}
 
 [tool.poetry.dependencies]
 python = "^3.6"
