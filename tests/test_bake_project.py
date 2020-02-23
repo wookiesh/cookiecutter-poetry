@@ -91,7 +91,6 @@ def test_bake_with_defaults(bake_result: Result) -> None:
     assert "tox.ini" in found_toplevel_files
     assert "tests" in found_toplevel_files
     assert "docs" in found_toplevel_files
-    assert ".bumpversion.cfg" in found_toplevel_files
     assert ".editorconfig" in found_toplevel_files
     assert ".gitignore" in found_toplevel_files
     assert "AUTHORS.rst" in found_toplevel_files

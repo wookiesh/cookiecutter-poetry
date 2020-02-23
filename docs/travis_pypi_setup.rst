@@ -43,7 +43,7 @@ If you are using this feature, this is how you would do a patch release:
 
 .. code-block:: bash
 
-    bump2version patch
+    poetry version patch
     git push --tags
 
 This will result in:
