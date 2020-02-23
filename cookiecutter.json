@@ -25,5 +25,6 @@
         "GNU Lesser General Public License v2.1",
         "BSD 2-Clause 'Simplified' License",
         "Not open source"
-    ]
+    ],
+    "use_pycharm": "n"
 }
