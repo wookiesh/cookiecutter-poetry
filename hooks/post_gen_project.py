@@ -24,7 +24,7 @@ if __name__ == "__main__":
     if "{{ cookiecutter.create_docs }}" != "y":
         remove("docs")
 
-    if "no" in "{{ cookiecutter.command_line_interface|lower }}":
+    if "none" in "{{ cookiecutter.command_line_interface|lower }}":
         cli_file = os.path.join("{{ cookiecutter.project_slug }}", "cli.py")
         remove(cli_file)
 
