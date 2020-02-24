@@ -60,12 +60,13 @@ def check_output_inside_dir(command, dirpath):
         return subprocess.check_output(shlex.split(command))
 
 
-def project_info(result) -> Tuple[Path, str, Path]:
+def project_info(result) -> Tuple[Path, str, Path, str]:
     """Get toplevel dir, project_slug, and project dir from baked cookies"""
     project_path: Path = Path(result.project)
     project_slug: str = os.path.split(str(project_path))[-1]
-    project_dir: Path = project_path / project_slug
-    return project_path, project_slug, project_dir
+    module_name: str = project_slug.replace("-", "_")
+    project_dir: Path = project_path / module_name
+    return project_path, project_slug, project_dir, module_name
 
 
 @pytest.yield_fixture
@@ -253,7 +254,7 @@ def cli_runner() -> CliRunner:
     indirect=True,
 )
 def test_bake_with_no_console_script(bake_result: Result) -> None:
-    project_path, project_slug, project_dir = project_info(bake_result)
+    project_path, project_slug, project_dir, _ = project_info(bake_result)
     assert not (project_dir / "cli.py").exists()
     assert (
         f"tool.poetry.plugins." not in bake_result.project.join("pyproject.toml").read()
@@ -269,7 +270,7 @@ def test_bake_with_no_console_script(bake_result: Result) -> None:
     "bake_result", ([{"command_line_interface": "click"}]), indirect=True,
 )
 def test_bake_with_click_console_script_files(bake_result: Result) -> None:
-    project_path, project_slug, project_dir = project_info(bake_result)
+    project_path, project_slug, project_dir, _ = project_info(bake_result)
 
     assert (project_dir / "cli.py").exists()
     assert (
@@ -291,15 +292,15 @@ def test_bake_with_click_console_script_files(bake_result: Result) -> None:
 def test_bake_with_click_console_script(
     bake_result: Result, cli_runner: CliRunner
 ) -> None:
-    project_path, project_slug, project_dir = project_info(bake_result)
+    project_path, project_slug, project_dir, module_name = project_info(bake_result)
     module_path = project_dir / "cli.py"
-    module_name = f"{project_slug}.cli"
+    module_name = f"{module_name}.cli"
     spec = importlib.util.spec_from_file_location(module_name, module_path)
     cli = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(cli)
     noarg_result = cli_runner.invoke(cli.main)
     assert noarg_result.exit_code == 0
-    noarg_output = f"Replace this message by putting your code into {project_slug}"
+    noarg_output = f"Replace this message by putting your code into {module_name}"
     assert noarg_output in noarg_result.output
     help_result = cli_runner.invoke(cli.main, ["--help"])
     assert help_result.exit_code == 0

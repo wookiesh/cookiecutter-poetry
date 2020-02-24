@@ -63,5 +63,5 @@ build-backend = "poetry.masonry.api"
 
 {%- if 'none' not in cookiecutter.command_line_interface|lower %}
 [tool.poetry.plugins."console_scripts"]
-"{{ cookiecutter.project_slug }}" = "{{ cookiecutter.project_slug }}.cli:main"
+"{{ cookiecutter.module_name }}" = "{{ cookiecutter.module_name }}.cli:main"
 {%- endif %}
