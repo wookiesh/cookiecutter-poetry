@@ -19,9 +19,12 @@ github_username
 
 project_name
     The name of your new Python package project. This is used in documentation, so spaces and any characters are fine here.
-    
+
 project_slug
-    The namespace of your Python package. This should be Python import-friendly. Typically, it is the slugified version of project_name.
+    Slugified name of your new Python project. Typically, it is the slugified version of project-name.
+    
+module_name
+    The namespace of your Python package. This should be Python import-friendly. Typically, it is the slugified version with underscores of project_name.
 
 project_short_description
     A 1-sentence description of what your Python package does.
@@ -47,4 +50,4 @@ use_pypi_deployment_with_travis
     Whether to use PyPI deployment with Travis.
 
 command_line_interface
-    Whether to create a console script using Click. Console script entry point will match the project_slug. Options: ['Click', "No command-line interface"]
+    Whether to create a console script using Click. Console script entry point will match the module_name. Options: ["Click", "None"]

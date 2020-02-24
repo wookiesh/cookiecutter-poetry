@@ -61,7 +61,7 @@ def check_output_inside_dir(command, dirpath):
 
 
 def project_info(result) -> Tuple[Path, str, Path, str]:
-    """Get toplevel dir, project_slug, and project dir from baked cookies"""
+    """Get toplevel dir, project-slug, project dir and module_name from baked cookies"""
     project_path: Path = Path(result.project)
     project_slug: str = os.path.split(str(project_path))[-1]
     module_name: str = project_slug.replace("-", "_")
