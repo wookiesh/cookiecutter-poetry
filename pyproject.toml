@@ -37,6 +37,7 @@ alabaster = "^0.7.12"
 watchdog = "^0.10.1"
 black = "^19.10b0"
 isort = "^4.3.21"
+bump2version = "^1.0.0"
 
 [build-system]
 requires = ["poetry>=0.12"]
