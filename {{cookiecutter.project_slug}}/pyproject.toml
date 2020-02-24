@@ -34,11 +34,9 @@ classifiers = [
 ]
 
 [tool.poetry.urls]
-"Bug Tracker" = "https://github.com/johanvergeer/cookiecutter-poetry/issues"
+"Bug Tracker" = "https://github.com/{{ cookiecutter.github_username }}/{{ cookiecutter.project_slug }}/issues"
 "Source" = "https://github.com/{{ cookiecutter.github_username }}/{{ cookiecutter.project_slug }}"
-"Tracker" = "https://github.com/{{ cookiecutter.github_username }}/{{ cookiecutter.project_slug }}/issues"
-{% if cookiecutter.create_docs == "y" %}
-"Documentation" = "https://{{ cookiecutter.project_slug }}.readthedocs.io"{% endif %}
+{% if cookiecutter.create_docs == "y" -%}"Documentation" = "https://{{ cookiecutter.project_slug }}.readthedocs.io"{% endif %}
 
 [tool.poetry.dependencies]
 python = "^3.6"
@@ -50,10 +48,8 @@ watchdog = "^0.9.0"
 flake8 = "^3.7.8"
 tox = "^3.14.0"
 coverage = "^4.5.4"
-{% if cookiecutter.create_docs == "y" %}
-Sphinx = "^1.8.5"{% endif %}
-{% if cookiecutter.command_line_interface|lower == 'click' -%}
-Click = "^7.0"{% endif %}
+{% if cookiecutter.create_docs == "y" -%}Sphinx = "^1.8.5"{% endif %}
+{%- if cookiecutter.command_line_interface|lower == 'click' -%}Click = "^7.0"{% endif %}
 pytest = "^4.6.5"
 pytest-runner = "^5.1"
 
