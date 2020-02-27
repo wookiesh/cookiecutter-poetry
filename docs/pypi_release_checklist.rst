@@ -8,7 +8,7 @@ Before Your First Release
 
     .. code-block:: bash
 
-        python setup.py register
+        poetry publish
 
 #. Visit PyPI to make sure it registered.
 
@@ -28,13 +28,8 @@ For Every Release
 
     .. code-block:: bash
 
-        poetry version minor
-
-#. Install the package again for local development, but with the new version number:
-
-    .. code-block:: bash
-
-        python setup.py develop
+        bumpversion minor  # Bumps version to 0.1.1-dev0
+        bumpversion release  # Bumps version to 0.1.1
 
 #. Run the tests:
 
@@ -58,14 +53,8 @@ For Every Release
 
     #. Copy and paste the RestructuredText into http://rst.ninjs.org/ to find out what broke the formatting.
 
-    #. Check your long_description locally:
-
-        .. code-block:: bash
-
-            pip install readme_renderer
-            python setup.py check -r -s
-
-#. Edit the release on GitHub (e.g. https://github.com/audreyr/cookiecutter/releases). Paste the release notes into the release's release page, and come up with a title for the release.
+#. Edit the release on GitHub (e.g. https://github.com/johanvergeer/cookiecutter-poetry/releases).
+Paste the release notes into the release's release page, and come up with a title for the release.
 
 About This Checklist
 --------------------
@@ -75,4 +64,4 @@ This checklist is adapted from:
 * https://gist.github.com/audreyr/5990987
 * https://gist.github.com/audreyr/9f1564ea049c14f682f4
 
-It assumes that you are using all features of Cookiecutter PyPackage.
+It assumes that you are using all features of Cookiecutter Poetry.
