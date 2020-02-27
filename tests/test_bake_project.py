@@ -1,6 +1,7 @@
 import datetime
 import importlib
 import os
+import re
 import shlex
 import subprocess
 from contextlib import contextmanager
@@ -230,7 +231,7 @@ def test_bake_selecting_license(
 def test_bake_not_open_source(bake_result: Result) -> None:
     found_toplevel_files = [f.basename for f in bake_result.project.listdir()]
     assert "pyproject.toml" in found_toplevel_files
-    assert f"license = " not in bake_result.project.join("pyproject.toml").read()
+    assert "license = " not in bake_result.project.join("pyproject.toml").read()
     assert "LICENSE" not in found_toplevel_files
     assert "License" not in bake_result.project.join("README.rst").read()
 
@@ -308,5 +309,44 @@ def test_bake_with_click_console_script(
 
 
 # endregion
+
+# endregion
+
+# region Versions
+
+
+@pytest.mark.parametrize(
+    "version,short_version",
+    [
+        ("0.0.1", "0.0.1"),
+        ("0.1.0", "0.1.0"),
+        ("1.0.0", "1.0.0"),
+        ("1.0.0-dev0", "1.0.0"),
+    ],
+)
+def test_version(cookies: Cookies, version: str, short_version: str) -> None:
+    with bake_in_temp_dir(cookies, extra_context={"version": version}) as result:
+        assert f'version = "{version}"' in result.project.join("pyproject.toml").read()
+        assert f'release = "{version}"' in result.project.join("docs/conf.py").read()
+
+        regex = r"^([0-9]+\.){2}[0-9]+"  # Same regex used in docs/conf.py
+        assert (
+            f'version = re.match(r"{regex}", release).group(0)'
+            in result.project.join("docs/conf.py").read()
+        )
+        assert re.match(regex, version).group(0) == short_version
+
+
+def test_bumpversion_config_file(bake_result: Result):
+    """bumpversion config should be the same as the config for the main project,
+    except for the initial version number"""
+    project_root = Path("..").absolute()
+    expected_content = (project_root / ".bumpversion.cfg").read_text()
+    expected_content = re.sub(
+        r"([0-9]+\.){2}[0-9]+(-(dev|prod)[0-9]+)?", "0.1.0", expected_content
+    )
+
+    assert bake_result.project.join(".bumpversion.cfg").read() == expected_content
+
 
 # endregion
