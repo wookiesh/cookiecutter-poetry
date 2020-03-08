@@ -42,6 +42,12 @@ black = "^19.10b0"
 isort = "^4.3.21"
 bump2version = "^1.0.0"
 
+[tool.black]
+exclude="{{cookiecutter.project_slug}}"
+
+[tool.isort]
+skip="{{cookiecutter.project_slug}}"
+
 [build-system]
 requires = ["poetry>=0.12"]
 build-backend = "poetry.masonry.api"
