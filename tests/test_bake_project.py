@@ -255,7 +255,7 @@ def cli_runner() -> CliRunner:
     indirect=True,
 )
 def test_bake_with_no_console_script(bake_result: Result) -> None:
-    project_path, project_slug, project_dir, _ = project_info(bake_result)
+    _, _, project_dir, _ = project_info(bake_result)
     assert not (project_dir / "cli.py").exists()
     assert (
         f"tool.poetry.plugins." not in bake_result.project.join("pyproject.toml").read()
@@ -271,7 +271,7 @@ def test_bake_with_no_console_script(bake_result: Result) -> None:
     "bake_result", ([{"command_line_interface": "click"}]), indirect=True,
 )
 def test_bake_with_click_console_script_files(bake_result: Result) -> None:
-    project_path, project_slug, project_dir, _ = project_info(bake_result)
+    _, _, project_dir, _ = project_info(bake_result)
 
     assert (project_dir / "cli.py").exists()
     assert (
@@ -281,8 +281,7 @@ def test_bake_with_click_console_script_files(bake_result: Result) -> None:
     assert f'Click = "^7.0"' in bake_result.project.join("pyproject.toml").read()
     assert (
         """[tool.poetry.plugins.\"console_scripts\"]
-\"python_boilerplate\" = \"python_boilerplate.cli:main\"
-"""
+\"python_boilerplate\" = \"python_boilerplate.cli:main\""""
         in bake_result.project.join("pyproject.toml").read()
     )
 
@@ -293,7 +292,7 @@ def test_bake_with_click_console_script_files(bake_result: Result) -> None:
 def test_bake_with_click_console_script(
     bake_result: Result, cli_runner: CliRunner
 ) -> None:
-    project_path, project_slug, project_dir, module_name = project_info(bake_result)
+    _, _, project_dir, module_name = project_info(bake_result)
     module_path = project_dir / "cli.py"
     module_name = f"{module_name}.cli"
     spec = importlib.util.spec_from_file_location(module_name, module_path)
@@ -337,11 +336,10 @@ def test_version(cookies: Cookies, version: str, short_version: str) -> None:
         assert re.match(regex, version).group(0) == short_version
 
 
-def test_bumpversion_config_file(bake_result: Result):
+def test_bumpversion_config_file(bake_result: Result, project_root_dir: Path):
     """bumpversion config should be the same as the config for the main project,
     except for the initial version number"""
-    project_root = Path("..").absolute()
-    expected_content = (project_root / ".bumpversion.cfg").read_text()
+    expected_content = (project_root_dir / ".bumpversion.cfg").read_text()
     expected_content = re.sub(
         r"([0-9]+\.){2}[0-9]+(-(dev|prod)[0-9]+)?", "0.1.0", expected_content
     )
