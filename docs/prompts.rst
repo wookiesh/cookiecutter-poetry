@@ -58,21 +58,6 @@ The following appear in various parts of your generated project.
 `use_pycharm`
     Will PyCharm_ be used for this project?
 
-
-
-Options
--------
-
-The following package configuration options set up different features for your project.
-
-use_pypi_deployment_with_travis
-    Whether to use PyPI deployment with Travis.
-
-command_line_interface
-    Whether to create a console script using Click. Console script entry point will match the module_name. Options: ["Click", "None"]
-
-
-.. _pyup.io: https://pyup.io
 .. _Click: https://click.palletsprojects.com/en/7.x/
 .. _argparse: https://docs.python.org/3/library/argparse.html
 .. _PyCharm: https://www.jetbrains.com/pycharm/

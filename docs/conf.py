@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 #
-# cookiecutter-pypackage documentation build configuration file, created by
+# cookiecutter-poetry documentation build configuration file, created by
 # sphinx-quickstart on Sun Dec 13 09:13:01 2015.
 #
 # This file is execfile()d with the current directory set to its
@@ -12,10 +12,8 @@
 # All configuration values have a default; values that are commented out
 # serve to show the default.
 
-import os
 import re
-import shlex
-import sys
+from datetime import date
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
@@ -53,9 +51,9 @@ source_suffix = ".rst"
 master_doc = "index"
 
 # General information about the project.
-project = "cookiecutter-pypackage"
-copyright = "2015, Audrey Roy Greenfeld"
-author = "Audrey Roy Greenfeld"
+project = "cookiecutter-poetry"
+copyright = f"2019 {date.today().year}, Johan Vergeer"
+author = "Johan Vergeer"
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -110,12 +108,11 @@ pygments_style = "sphinx"
 # If true, `todo` and `todoList` produce output, else they produce nothing.
 todo_include_todos = True
 
-
 # -- Options for HTML output ----------------------------------------------
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
-html_theme = "alabaster"
+html_theme = "sphinx_rtd_theme"
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
@@ -207,19 +204,19 @@ html_static_path = ["_static"]
 # html_search_scorer = 'scorer.js'
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = "cookiecutter-pypackagedoc"
+htmlhelp_basename = "cookiecutter-poetrydoc"
 
 # -- Options for LaTeX output ---------------------------------------------
 
 latex_elements = {
     # The paper size ('letterpaper' or 'a4paper').
-    #'papersize': 'letterpaper',
+    # 'papersize': 'letterpaper',
     # The font size ('10pt', '11pt' or '12pt').
-    #'pointsize': '10pt',
+    # 'pointsize': '10pt',
     # Additional stuff for the LaTeX preamble.
-    #'preamble': '',
+    # 'preamble': '',
     # Latex figure (float) alignment
-    #'figure_align': 'htbp',
+    # 'figure_align': 'htbp',
 }
 
 # Grouping the document tree into LaTeX files. List of tuples
@@ -228,9 +225,9 @@ latex_elements = {
 latex_documents = [
     (
         master_doc,
-        "cookiecutter-pypackage.tex",
-        "cookiecutter-pypackage Documentation",
-        "Audrey Roy Greenfeld",
+        "cookiecutter-poetry.tex",
+        "cookiecutter-poetry Documentation",
+        "Johan Vergeer",
         "manual",
     ),
 ]
@@ -263,8 +260,8 @@ latex_documents = [
 man_pages = [
     (
         master_doc,
-        "cookiecutter-pypackage",
-        "cookiecutter-pypackage Documentation",
+        "cookiecutter-poetry",
+        "cookiecutter-poetry Documentation",
         [author],
         1,
     )
@@ -282,10 +279,10 @@ man_pages = [
 texinfo_documents = [
     (
         master_doc,
-        "cookiecutter-pypackage",
-        "cookiecutter-pypackage Documentation",
+        "cookiecutter-poetry",
+        "cookiecutter-poetry Documentation",
         author,
-        "cookiecutter-pypackage",
+        "cookiecutter-poetry",
         "One line description of project.",
         "Miscellaneous",
     ),

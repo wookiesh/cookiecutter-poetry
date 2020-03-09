@@ -2,14 +2,11 @@
 Cookiecutter Poetry
 ===================
 
-.. image:: https://travis-ci.org/audreyr/cookiecutter-pypackage.svg?branch=master
-    :target: https://travis-ci.org/audreyr/cookiecutter-pypackage
-
 Cookiecutter_ template for a Python package.
 
-* GitHub repo: https://github.com/audreyr/cookiecutter-pypackage/
-* Documentation: https://cookiecutter-pypackage.readthedocs.io/
-* Free software: BSD license
+* GitHub repo: https://github.com/johanvergeer/cookiecutter-poetry/
+* Documentation: https://cookiecutter-poetry.readthedocs.io/
+* Free software: MIT license
 
 Features
 --------
@@ -28,27 +25,27 @@ Build Status
 
 Linux:
 
-.. image:: https://img.shields.io/travis/audreyr/cookiecutter-pypackage.svg
-    :target: https://travis-ci.org/audreyr/cookiecutter-pypackage
+.. image:: https://img.shields.io/travis/johanvergeer/cookiecutter-poetry.svg
+    :target: https://travis-ci.com/johanvergeer/cookiecutter-poetry
     :alt: Linux build status on Travis CI
 
 Windows:
 
-.. image:: https://ci.appveyor.com/api/projects/status/github/audreyr/cookiecutter-pypackage?branch=master&svg=true
-    :target: https://ci.appveyor.com/project/audreyr/cookiecutter-pypackage/branch/master
+.. image:: https://ci.appveyor.com/api/projects/status/github/johanvergeer/cookiecutter-poetry?branch=master&svg=true
+    :target: https://ci.appveyor.com/project/johanvergeer/cookiecutter-poetry/branch/master
     :alt: Windows build status on Appveyor
 
 Quickstart
 ----------
 
-Install the latest Cookiecutter if you haven't installed it yet (this requires
-Cookiecutter 1.4.0 or higher)::
+Install the latest Cookiecutter if you haven't installed it yet
+(this requires Cookiecutter 1.4.0 or higher)::
 
     pip install -U cookiecutter
 
 Generate a Python package project::
 
-    cookiecutter https://github.com/audreyr/cookiecutter-pypackage.git
+    cookiecutter https://github.com/audreyr/cookiecutter-poetry.git
 
 Then:
 
@@ -66,53 +63,9 @@ Then:
 .. _`pip docs for requirements files`: https://pip.pypa.io/en/stable/user_guide/#requirements-files
 .. _Register: https://packaging.python.org/tutorials/packaging-projects/#uploading-the-distribution-archives
 
-For more details, see the `cookiecutter-pypackage tutorial`_.
+For more details, see the `cookiecutter-poetry tutorial`_.
 
-.. _`cookiecutter-pypackage tutorial`: https://cookiecutter-pypackage.readthedocs.io/en/latest/tutorial.html
-
-Not Exactly What You Want?
---------------------------
-
-Don't worry, you have options:
-
-Similar Cookiecutter Templates
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-* `Nekroze/cookiecutter-pypackage`_: A fork of this with a PyTest test runner,
-  strict flake8 checking with Travis/Tox, and some docs and `setup.py` differences.
-
-* `tony/cookiecutter-pypackage-pythonic`_: Fork with py2.7+3.3 optimizations.
-  Flask/Werkzeug-style test runner, ``_compat`` module and module/doc conventions.
-  See ``README.rst`` or the `github comparison view`_ for exhaustive list of
-  additions and modifications.
-
-* `ardydedase/cookiecutter-pypackage`_: A fork with separate requirements files rather than a requirements list in the ``setup.py`` file.
-
-* `lgiordani/cookiecutter-pypackage`_: A fork of Cookiecutter that uses Punch_ instead of bump2version_ and with separate requirements files.
-
-* `briggySmalls/cookiecutter-pypackage`_: A fork using Pipenv_ for package management, with linting, formatting and more.
-
-* Also see the `network`_ and `family tree`_ for this repo. (If you find
-  anything that should be listed here, please add it and send a pull request!)
-
-Support this Project
-~~~~~~~~~~~~~~~~~~~~~
-
-You can take our detailed course that covers all the features of this template, which has the added bonus of funding this project:
-
-.. image:: https://www.pydanny.com/static/packaging-course.jpg
-   :name: Creating and Distributing Python Packages image
-   :align: center
-   :alt: Creating and Distributing Python Packages
-   :target: https://twoscoopspress.thinkific.com/courses/creating-and-distributing-python-packages
-
-También disponible en español:
-
-.. image:: https://www.pydanny.com/static/packaging-course-es.jpg
-   :name: Creating and Distributing Python Packages ES image
-   :align: center
-   :alt: Creating and Distributing Python Packages ES
-   :target: https://twoscoopspress.thinkific.com/courses/creating-and-distributing-python-packages-es
+.. _`cookiecutter-poetry tutorial`: https://cookiecutter-poetry.readthedocs.io/en/latest/tutorial.html
 
 Fork This / Create Your Own
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -142,12 +95,3 @@ make my own packaging experience better.
 .. _Punch: https://github.com/lgiordani/punch
 .. _Pipenv: https://pipenv.readthedocs.io/en/latest/
 .. _PyPi: https://pypi.python.org/pypi
-
-.. _`Nekroze/cookiecutter-pypackage`: https://github.com/Nekroze/cookiecutter-pypackage
-.. _`tony/cookiecutter-pypackage-pythonic`: https://github.com/tony/cookiecutter-pypackage-pythonic
-.. _`ardydedase/cookiecutter-pypackage`: https://github.com/ardydedase/cookiecutter-pypackage
-.. _`lgiordani/cookiecutter-pypackage`: https://github.com/lgiordani/cookiecutter-pypackage
-.. _`briggySmalls/cookiecutter-pypackage`: https://github.com/briggySmalls/cookiecutter-pypackage
-.. _github comparison view: https://github.com/tony/cookiecutter-pypackage-pythonic/compare/audreyr:master...master
-.. _`network`: https://github.com/audreyr/cookiecutter-pypackage/network
-.. _`family tree`: https://github.com/audreyr/cookiecutter-pypackage/network/members
