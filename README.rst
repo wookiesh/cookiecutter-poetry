@@ -1,10 +1,6 @@
-======================
-Cookiecutter PyPackage
-======================
-
-.. image:: https://pyup.io/repos/github/audreyr/cookiecutter-pypackage/shield.svg
-     :target: https://pyup.io/repos/github/audreyr/cookiecutter-pypackage/
-     :alt: Updates
+===================
+Cookiecutter Poetry
+===================
 
 .. image:: https://travis-ci.org/audreyr/cookiecutter-pypackage.svg?branch=master
     :target: https://travis-ci.org/audreyr/cookiecutter-pypackage
@@ -66,7 +62,6 @@ Then:
 * Release your package by pushing a new tag to master.
 * Add a `requirements.txt` file that specifies the packages you will need for
   your project and their versions. For more info see the `pip docs for requirements files`_.
-* Activate your project on `pyup.io`_.
 
 .. _`pip docs for requirements files`: https://pip.pypa.io/en/stable/user_guide/#requirements-files
 .. _Register: https://packaging.python.org/tutorials/packaging-projects/#uploading-the-distribution-archives
@@ -143,7 +138,6 @@ make my own packaging experience better.
 .. _Tox: http://testrun.org/tox/
 .. _Sphinx: http://sphinx-doc.org/
 .. _ReadTheDocs: https://readthedocs.io/
-.. _`pyup.io`: https://pyup.io/
 .. _bump2version: https://github.com/c4urself/bump2version
 .. _Punch: https://github.com/lgiordani/punch
 .. _Pipenv: https://pipenv.readthedocs.io/en/latest/

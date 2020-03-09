@@ -41,9 +41,6 @@ The following appear in various parts of your generated project.
 `use_pypi_deployment_with_travis`
     Whether to deploy to Pypi with Travis CI
 
-`add_pyup_badge`
-    Whether to add a badge for pyup.io_ to `README.rst`
-
 `command_line_interface`
     - none: Don't create a command line application.
     - click: Create a command line interface application using Click_.
