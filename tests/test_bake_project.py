@@ -14,6 +14,8 @@ from click.testing import CliRunner
 from cookiecutter.utils import rmtree
 from pytest_cookies.plugin import Cookies, Result
 
+from tests.utils import PROJECT_ROOT_DIR
+
 
 @contextmanager
 def inside_dir(dirpath):
@@ -36,9 +38,7 @@ def bake_in_temp_dir(cookies: Cookies, *args, **kwargs) -> Result:
     :param cookies: pytest_cookies.Cookies,
         cookie to be baked and its temporal files will be removed
     """
-    current_path = Path(".").parent.absolute()
-    template_path = current_path.parent.absolute()
-    result = cookies.bake(*args, template=str(template_path), **kwargs)
+    result = cookies.bake(*args, template=str(PROJECT_ROOT_DIR), **kwargs)
     try:
         yield result
     finally:
@@ -336,10 +336,10 @@ def test_version(cookies: Cookies, version: str, short_version: str) -> None:
         assert re.match(regex, version).group(0) == short_version
 
 
-def test_bumpversion_config_file(bake_result: Result, project_root_dir: Path):
+def test_bumpversion_config_file(bake_result: Result):
     """bumpversion config should be the same as the config for the main project,
     except for the initial version number"""
-    expected_content = (project_root_dir / ".bumpversion.cfg").read_text()
+    expected_content = (PROJECT_ROOT_DIR / ".bumpversion.cfg").read_text()
     expected_content = re.sub(
         r"([0-9]+\.){2}[0-9]+(-(dev|prod)[0-9]+)?", "0.1.0", expected_content
     )

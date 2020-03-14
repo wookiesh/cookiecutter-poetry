@@ -6,7 +6,7 @@ import pytest
 @pytest.fixture
 def project_root_dir() -> Path:
     """The cookiecutter-poetry project path"""
-    return Path("..").absolute()
+    return Path().absolute().parent
 
 
 @pytest.fixture

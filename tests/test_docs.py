@@ -5,16 +5,19 @@ from typing import List, Tuple
 
 import pytest
 
+# @pytest.mark.datafiles("cookiecutter.json", relative_to=ROOT_DIR)
+from tests.utils import PROJECT_ROOT_DIR
 
-def get_prompts_from_cookiecutter_json(project_root_dir: Path) -> List[str]:
-    with open(str((project_root_dir / "cookiecutter.json"))) as f:
+
+def get_prompts_from_cookiecutter_json() -> List[str]:
+    with open(str((PROJECT_ROOT_DIR / "cookiecutter.json"))) as f:
         keys = list(json.load(f).keys())
         return keys
 
 
-def get_prompts_from_doc(project_root_dir: Path) -> List[str]:
+def get_prompts_from_doc() -> List[str]:
     prompt_regex = re.compile(r"\n`[`a-z_]+`")
-    with open(str(project_root_dir / "docs" / "prompts.rst")) as f:
+    with open(str(PROJECT_ROOT_DIR / "docs" / "prompts.rst")) as f:
         raw_prompts_from_doc = prompt_regex.findall("\n".join(f.readlines()))
         return [p.replace("`", "").replace("\n", "") for p in raw_prompts_from_doc]
 
@@ -30,10 +33,8 @@ def fill_prompts_list(prompts: List[str], length: int) -> None:
 
 
 def get_prompts() -> List[Tuple[int, str, str]]:
-    project_root_dir = Path("..").absolute()
-
-    from_json = get_prompts_from_cookiecutter_json(project_root_dir)
-    from_doc = get_prompts_from_doc(project_root_dir)
+    from_json = get_prompts_from_cookiecutter_json()
+    from_doc = get_prompts_from_doc()
     indexes = get_indexes(from_json, from_doc)
 
     fill_prompts_list(from_json, len(indexes))
