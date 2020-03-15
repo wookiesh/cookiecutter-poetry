@@ -23,8 +23,6 @@ Features
 Build Status
 -------------
 
-![Python test](https://github.com/johanvergeer/cookiecutter-poetry/workflows/Python%20test/badge.svg?branch=master)
-
 .. image:: https://github.com/johanvergeer/cookiecutter-poetry/workflows/Python%20test/badge.svg?branch=master
     :target: https://github.com/johanvergeer/cookiecutter-poetry/actions
     :alt: Linux build status on Github Actions
