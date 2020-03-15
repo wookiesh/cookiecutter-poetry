@@ -15,6 +15,7 @@ Getting Started
    readme
    tutorial
    pypi_release_checklist
+   contributing
 
 Basics
 ------
