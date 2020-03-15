@@ -278,12 +278,15 @@ def test_bake_with_click_console_script_files(bake_result: Result) -> None:
     assert (project_dir / "cli.py").exists()
     assert (
         f"import click"
-        in bake_result.project.join("src").join("python_boilerplate").join("cli.py").read()
+        in bake_result.project.join("src")
+        .join("python_boilerplate")
+        .join("cli.py")
+        .read()
     )
     assert f'Click = "^7.0"' in bake_result.project.join("pyproject.toml").read()
     assert (
         """[tool.poetry.plugins.\"console_scripts\"]
-\"python_boilerplate\" = \"python_boilerplate.cli:main\""""
+    \"python_boilerplate\" = \"python_boilerplate.cli:main\""""
         in bake_result.project.join("pyproject.toml").read()
     )
 
