@@ -19,15 +19,17 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Install
-      uses: abatilo/actions-poetry@v1.5.0
+    - name: Setup Python
+      uses: actions/setup-python@v1.2.0
       with:
-        python_version: ${{ matrix.python-version }}
-        poetry_version: 1.0.5
-        args: install
+        # Version range or exact version of a Python version to use, using SemVer's version range syntax.
+        python-version: ${{ matrix.python-version }}
+    -   name: Install Poetry
+        uses: dschep/install-poetry-action@v1.3
+        with:
+            # Version of Poetry to use
+            version: 1.0.5
+    - name: Install Project Dependencies
+      run: poetry install
     - name: Run pytest
-      uses: abatilo/actions-poetry@v1.5.0
-      with:
-        python_version: ${{ matrix.python-version }}
-        poetry_version: 1.0.5
-        args: run pytest
+      run: poetry run pytest
