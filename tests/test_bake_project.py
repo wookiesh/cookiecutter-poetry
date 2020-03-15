@@ -66,7 +66,7 @@ def project_info(result) -> Tuple[Path, str, Path, str]:
     project_path: Path = Path(result.project)
     project_slug: str = os.path.split(str(project_path))[-1]
     module_name: str = project_slug.replace("-", "_")
-    project_dir: Path = project_path / module_name
+    project_dir: Path = project_path / "src" / module_name
     return project_path, project_slug, project_dir, module_name
 
 
@@ -89,7 +89,7 @@ def test_bake_with_defaults(bake_result: Result) -> None:
 
     found_toplevel_files = [f.basename for f in bake_result.project.listdir()]
     assert "pyproject.toml" in found_toplevel_files
-    assert "python_boilerplate" in found_toplevel_files
+    assert "src" in found_toplevel_files
     assert "tox.ini" in found_toplevel_files
     assert "tests" in found_toplevel_files
     assert "docs" in found_toplevel_files
@@ -102,6 +102,9 @@ def test_bake_with_defaults(bake_result: Result) -> None:
 
     assert "licenses" not in found_toplevel_files
 
+    found_source_files = [f.basename for f in bake_result.project.join("src").listdir()]
+    assert "python_boilerplate" in found_source_files
+
 
 # endregion
 
@@ -111,7 +114,6 @@ def test_bake_with_defaults(bake_result: Result) -> None:
 def test_bake_and_run_tests(bake_result):
     assert bake_result.project.isdir()
     assert run_inside_dir("pytest", str(bake_result.project)) == 0
-    print("test_bake_and_run_tests path", str(bake_result.project))
 
 
 def test_using_pytest(bake_result):
@@ -276,7 +278,7 @@ def test_bake_with_click_console_script_files(bake_result: Result) -> None:
     assert (project_dir / "cli.py").exists()
     assert (
         f"import click"
-        in bake_result.project.join("python_boilerplate").join("cli.py").read()
+        in bake_result.project.join("src").join("python_boilerplate").join("cli.py").read()
     )
     assert f'Click = "^7.0"' in bake_result.project.join("pyproject.toml").read()
     assert (

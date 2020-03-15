@@ -18,7 +18,9 @@ license = "{{ license_classifiers[cookiecutter.open_source_license] }}"
 readme = "README.rst"
 keywords = ["{{ cookiecutter.project_slug }}"]
 repository = "https://github.com/{{ cookiecutter.github_username }}/{{ cookiecutter.project_slug }}"
-
+packages = [
+    { include = "{{cookiecutter.module_name}}", from = "src" },
+]
 classifiers = [
     "Development Status :: 2 - Pre-Alpha",
     "Intended Audience :: Developers",

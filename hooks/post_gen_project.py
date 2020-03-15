@@ -25,7 +25,7 @@ if __name__ == "__main__":
         remove("docs")
 
     if "none" in "{{ cookiecutter.command_line_interface|lower }}":
-        cli_file = os.path.join("{{ cookiecutter.module_name }}", "cli.py")
+        cli_file = os.path.join("src", "{{ cookiecutter.module_name }}", "cli.py")
         remove(cli_file)
 
     if "Not open source" == "{{ cookiecutter.open_source_license }}":
