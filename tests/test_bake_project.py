@@ -9,7 +9,6 @@ from pathlib import Path
 from typing import Tuple
 
 import pytest
-import yaml
 from click.testing import CliRunner
 from cookiecutter.utils import rmtree
 from pytest_cookies.plugin import Cookies, Result
