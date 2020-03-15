@@ -23,17 +23,11 @@ Features
 Build Status
 -------------
 
-Linux:
+![Python test](https://github.com/johanvergeer/cookiecutter-poetry/workflows/Python%20test/badge.svg?branch=master)
 
-.. image:: https://img.shields.io/travis/johanvergeer/cookiecutter-poetry.svg
-    :target: https://travis-ci.com/johanvergeer/cookiecutter-poetry
-    :alt: Linux build status on Travis CI
-
-Windows:
-
-.. image:: https://ci.appveyor.com/api/projects/status/github/johanvergeer/cookiecutter-poetry?branch=master&svg=true
-    :target: https://ci.appveyor.com/project/johanvergeer/cookiecutter-poetry/branch/master
-    :alt: Windows build status on Appveyor
+.. image:: https://github.com/johanvergeer/cookiecutter-poetry/workflows/Python%20test/badge.svg?branch=master
+    :target: https://github.com/johanvergeer/cookiecutter-poetry/actions
+    :alt: Linux build status on Github Actions
 
 Quickstart
 ----------
