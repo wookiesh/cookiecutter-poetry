@@ -23,9 +23,6 @@ classifiers = [
     "Programming Language :: Python :: Implementation :: PyPy",
     "Topic :: Software Development",
 ]
-packages = [
-    { include = "{{cookiecutter.project_slug}}" }
-]
 
 [tool.poetry.urls]
 "Bug Tracker" = "https://github.com/johanvergeer/cookiecutter-poetry/issues"
