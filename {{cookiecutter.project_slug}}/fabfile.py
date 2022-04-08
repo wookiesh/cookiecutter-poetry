@@ -47,9 +47,9 @@ def lint(_):
     system(
         """
         black .
+        isort .
         flake8
         pylint --enable-all-extensions src tests fabfile.py
-        prospector
         toml-sort -ia pyproject.toml
     """
     )
@@ -118,8 +118,8 @@ def deploy(con, version=VERSION, environment=ENVIRONMENT):
 
 
 @task(hosts=HOSTS)
-def make(c, version=VERSION, environment=ENVIRONMENT):
+def make(con, version=VERSION, environment=ENVIRONMENT):
     """Build, publish, and deploy."""
-    version = build(c, version, environment)
-    publish(c, version, environment)
-    deploy(c, version, environment)
+    version = build(con, version, environment)
+    publish(con, version, environment)
+    deploy(con, version, environment)

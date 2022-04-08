@@ -1,0 +1,35 @@
+{% raw %}version: "3.7"
+
+networks:
+  main_traefik-public:
+    external: true
+
+secrets:
+  {{name}}.http.rollbar.token:
+    external: true
+
+services:
+  http-{{environment}}:
+    image: hub.ana.lu/{{name}}-{{environment}}:{{version}}
+    environment:
+      environment: {{environment}}
+    secrets:
+      - source: {{name}}.http.rollbar.token
+        target: rollbar_token
+    command: ["{{name}}.main:create_app", "--factory", "--log-config","uvicorn-logging.yaml"]
+    deploy:
+      resources:
+        limits:
+          cpus: "0.25"
+          memory: 250M
+      restart_policy:
+        max_attempts: 5
+      labels:
+        - traefik.enable=true
+        - traefik.http.routers.{{name}}-{{environment}}.rule=Host(`{{name}}{{('-'+environment) if environment!='prod' else ''}}.ana.lu`)
+        - traefik.http.routers.{{name}}-{{environment}}.entrypoints=websecure
+        - traefik.http.routers.{{name}}-{{environment}}.middlewares=external-secured
+        - traefik.http.services.{{name}}-{{environment}}.loadbalancer.server.port=8000
+    networks:
+      - main_traefik-public
+{% endraw %}

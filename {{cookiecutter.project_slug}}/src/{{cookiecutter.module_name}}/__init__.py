@@ -25,14 +25,10 @@ except metadata.PackageNotFoundError:
 
 def configure_logging(settings: Settings) -> None:
     """Configure logging, to be used at app startup."""
-    if RICH:
-        fmt = "%(message)s"
-        handlers = [RichHandler(rich_tracebacks=True)]
-    else:
-        handlers = [logging.StreamHandler()]
-        fmt = "%(asctime)s | %(levelname)-9s | %(name)s - %(message)s"
+    handler = RichHandler(rich_tracebacks=True) if RICH else logging.StreamHandler()
+    fmt = "%(message)s" if RICH else "%(asctime)s | %(levelname)-9s | %(name)s - %(message)s"
 
-    logging.basicConfig(level=settings.log_level, format=fmt, handlers=handlers, force=True)
+    logging.basicConfig(level=settings.log_level, format=fmt, handlers=[handler], force=True)
     logging.getLogger("multipart.multipart").setLevel(
         max(logging.INFO, getattr(logging, settings.log_level))
     )

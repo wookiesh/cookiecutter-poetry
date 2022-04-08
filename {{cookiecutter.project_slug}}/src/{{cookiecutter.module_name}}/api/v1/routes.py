@@ -11,7 +11,7 @@ router = APIRouter()
 add_to(router)
 
 
-@router.get("/")
-async def get_root() -> None:
+@router.get("/", response_model=dict)
+async def get_root() -> dict:
     """First endpoint."""
     return {"status": "ok"}
