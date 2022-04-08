@@ -1,0 +1,5 @@
+# http request to test running application using VSCode Rest Client
+
+GET http://localhost:8000/api/v1/
+
+###

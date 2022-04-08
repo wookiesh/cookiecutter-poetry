@@ -1,0 +1,6 @@
+[flake8]
+extend-ignore = E203,ANN101,W0511, B008
+max-line-length = 100
+per-file-ignores =
+    fabfile.py:ANN,S605,S606,S607
+    tests/*:ANN,S101

@@ -1,29 +1,39 @@
 {
-    "full_name": "Johan Vergeer",
-    "email": "johan@example.com",
-    "github_username": "johanvergeer",
+    "full_name": "Joseph Piron",
+    "email": [
+        "joseph.piron@gmail.com",
+        "joseph.piron@airport.etat.lu"
+    ],
+    "gitlab_username": "euv363",
+    "gitlab_group": [
+        "it",
+        "perso"
+    ],
     "project_name": "Python Boilerplate",
     "project_slug": "{{ cookiecutter.project_name.lower().replace(' ', '-') }}",
     "module_name": "{{ cookiecutter.project_name.lower().replace(' ', '_').replace('-', '_') }}",
-    "project_short_description": "Python Boilerplate contains all the boilerplate you need to create a Python package.",
-    "pypi_username": "{{ cookiecutter.github_username }}",
+    "project_short_description": "{{cookiecutter.project_name}} contains all you need to create a Python package.",
     "version": "0.1.0",
     "command_line_interface": [
+        "typer",
         "none",
-        "click",
         "argparse"
     ],
-    "create_author_file": "y",
-    "create_docs": "y",
+    "provide_rest_api": "y",
+    "create_author_file": "n",
+    "create_docs": "n",
     "open_source_license": [
+        "Not open source",
         "MIT license",
         "Apache Software License 2.0",
         "GNU General Public License v3.0",
         "GNU General Public License v2.0",
         "BSD 3-Clause 'New' or 'Revised' License",
         "GNU Lesser General Public License v2.1",
-        "BSD 2-Clause 'Simplified' License",
-        "Not open source"
+        "BSD 2-Clause 'Simplified' License"
     ],
-    "use_pycharm": "n"
+    "use_pycharm": "n",
+    "use_vscode": "y",
+    "use_docker_swarm": "y",
+    "deploy_host": ["ana-swarm-0", "ana-swarm-int-0", "docker"]
 }

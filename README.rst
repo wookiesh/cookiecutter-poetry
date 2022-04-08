@@ -16,7 +16,6 @@ Features
 --------
 
 * Testing setup with ``pytest``
-* `Github Actions`_: Ready for GitHub actions
 * Sphinx_ docs: Documentation ready for generation with, for example, ReadTheDocs_
 * Auto-release to PyPI_ when you push a new tag to master (optional)
 * Command line interface using Click (optional)
