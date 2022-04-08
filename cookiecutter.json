@@ -19,7 +19,7 @@
         "none",
         "argparse"
     ],
-    "provide_rest_api": "y",
+    "provide_rest_api": "n",
     "create_author_file": "n",
     "create_docs": "n",
     "open_source_license": [

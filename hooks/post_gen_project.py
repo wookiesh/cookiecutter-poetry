@@ -36,4 +36,8 @@ if __name__ == "__main__":
     if "n" == "{{ cookiecutter.use_vscode }}":
         remove('.vscode')
 
+    if 'n' == "{{ cookiecutter.provide_rest_api }}":
+        remove('src/{{cookiecutter.module_name}}/api')
+        remove('src/{{cookiecutter.module_name}}/rest.py')
+
     remove("licenses")

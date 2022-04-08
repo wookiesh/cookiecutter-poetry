@@ -9,10 +9,15 @@ app = typer.Typer()
 
 
 @app.command()
-def main() -> None:
-    """Main application entry point."""
+def main(
+    debug: bool = typer.Option(False, "-d", "--debug", help="display logging information"),
+) -> None:
+    """Run this cli to do something magical."""
     settings = Settings()
     configure_logging(settings)
+
+    if debug:
+        typer.secho("lets debug!", fg=typer.colors.RED)
 
 
 if __name__ == "__main__":
